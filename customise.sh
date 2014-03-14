@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 #Get the location of the OS images
 imagefolder=`sed -n "s/.*\"imagefolder\".*:.*\"\(.*\)\".*/\1/p" <os_config.json`
 
@@ -12,17 +14,18 @@ partLabels=`sed -n "s/.*\"label\".*:.*\"\(.*\)\".*/\1/p" <$imagefolder/partition
 #Get the number of partitions used.
 numparts=`echo $partLabels |wc -w`
 
-custom_part() {
-	#parameters
-	# $1 = srcfolder eg /mnt/os/xxxxx
-	# $2 = Part dev eg /dev/mmcblk0p5
-	# $3 = imagename eg Flavour_label
+custom_part() 
+{
+    #parameters
+    # $1 = srcfolder eg /mnt/os/xxxxx
+    # $2 = Part dev eg /dev/mmcblk0p5
+    # $3 = imagename eg Flavour_label
     local arg_srcfolder=$1
     local arg_imagename=$3
     local arg_dstfolder=/tmp/custom
 
-    mkdir -p arg_dstfolder
-    mount $2 arg_dstfolder
+    mkdir -p $arg_dstfolder
+    mount $2 $arg_dstfolder
 
     #Create a custom file name from the flavour and partition names
     local tarfile=$arg_imagename.tar
@@ -44,29 +47,31 @@ custom_part() {
         cd $arg_dstfolder
         xz -dc $gzfile | tar x 
     fi
+    sync
 
-    umount arg_dstfolder
-fi	
+    umount -f $arg_dstfolder
 }
 
 get_label()
 {
     local part=$1
-    local label
     if [ $numparts -eq 1 ]; then
         label=$partLabels
     else
-        label=`echo $partLabels|sed -n "s/\(.*\) \(.*\)/\$part/p"`
+        if [ $part -eq 1 ]; then
+            label=`echo $partLabels|sed -n "s/\(.*\) \(.*\)/\1/p"`
+        else
+            label=`echo $partLabels|sed -n "s/\(.*\) \(.*\)/\2/p"`
+        fi
     fi
-    return $label
 }
 
 # 1st partition
 if [ $numparts -gt 0 ]; then
     #Get the first partition name
-    label1=get_label 1
+    get_label 1
     #Create a custom file name from the flavour and partition names
-    part1Label=$flavour"_"$label1
+    part1Label=$flavour"_"$label
     #Customise partition 1
     custom_part "$imagefolder" "$part1" "$part1Label" 
 fi
@@ -74,9 +79,9 @@ fi
 #2nd Partition
 if [ $numparts -gt 1 ]; then
     #Get the second partition name
-    label2=get_label 2
+    get_label 2
     #Create a custom file name from the flavour and partition names
-    part2Label=$flavour"_"$label2
+    part2Label=$flavour"_"$label
     #Customise partition 2
     custom_part "$imagefolder" "$part2" "$part2Label" 
 fi
