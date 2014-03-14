@@ -1,8 +1,9 @@
 #!/bin/sh
 
-set -ex
+set -x
+#set -e
 
-if [ -z "$part1" ] || [ -z "$part2"]; then
+if [ -z "$part1" ] || [ -z "$part2" ]; then
   printf "Error: missing environment variable part1 or part2\n" 1>&2
   exit 1
 fi
@@ -16,8 +17,10 @@ sed /tmp/1/cmdline.txt -i -e "s|root=/dev/[^ ]*|root=${part2}|"
 sed /tmp/2/etc/fstab -i -e "s|^.* / |${part2}  / |"
 sed /tmp/2/etc/fstab -i -e "s|^.* /boot |${part1}  /boot |"
 
-#Customise the noobs installation
-if [ -e /mnt/customise.sh ]; then . /mnt/customise.sh; fi
+
+if [ -e /mnt/customise.sh ]; then 
+    /bin/sh -x /mnt/customise.sh 2>&1|tee /tmp/1/debug.log
+fi
 
 umount /tmp/1
 umount /tmp/2
