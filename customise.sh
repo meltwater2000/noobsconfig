@@ -48,7 +48,7 @@ custom_part()
         xz -dc $gzfile | tar x 
     fi
     sync
-
+    cd /mnt
     umount -f $arg_dstfolder
 }
 
