@@ -2,7 +2,7 @@ NOOBSConfig
 ===========
 
 ###Introduction###
-This repository contains files to customise the installation of a standard NOOBS installation.
+This repository contains files to customise the installation of a standard NOOBS installation on a Raspberry Pi.
 
 After the standard boot and root images have been installed to the SD card, it allows a custom tarball to be copied, decompressed and extracted onto each partition for each distro/partition/flavour that exists in the appropriate OS folder to apply user customisations.
 
