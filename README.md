@@ -41,10 +41,29 @@ The ability to patch using a flavour would be ideal for schools and others, it w
         `if [ -e /mnt/customise.sh ]; then . /mnt/customise.sh; fi`
    If the `partition_setup.sh` file does not exist, then one can be created.
    Example `partition_setup.sh` files can be found on this repository for the provided distros
-3. Create a tarball (optionally compressed) of all the files that you want copied to the distro after the standard installation and store it in the corresponding OS folder.
+3. Create a tarball (optionally compressed with xz) of all the files that you want copied to the distro after the standard installation and store it in the corresponding OS folder.
 Tarballs must have a specific name of the format `<flavour>_<partitionName>.tar(.xz)`
 Note that `<flavour>` and `<partitionName>` must exactly match (in characters and case) the names provided in the `*.json` files that describe each OS in order for them to be recognised.
-4. Install a distro from NOOBS as usual.
+So, for the standard v1.3.4 installation of noobs, the following tarball files are valid:
+<pre>
+Arch_boot.tar(.xz)
+Arch_root.tar(.xz)
+Data_Partition_data.tar(.xz)
+OpenELEC_Storage.tar(.xz)
+OpenELEC_System.tar(.xz)
+Pidora_boot.tar(.xz)
+Pidora_root.tar(.xz)
+Raspbian_boot.tar(.xz)
+Raspbian_root.tar(.xz)
+Raspbian_-_Boot_to_Scratch_boot.tar(.xz)
+Raspbian_-_Boot_to_Scratch_boot.tar(.xz)
+RaspBMC_boot.tar(.xz)
+RaspBMC_root.tar(.xz)
+RISC_OS_RISC_OS.tar(.xz)
+RISC_OS_RISC_OS_boot.tar(.xz)
+</pre>
+If you add any other flavours or OS partition names, you need to name a custom tarball appropriately.
+4. Install a distro from NOOBS as usual. Your customisations will be copied as part of the installation.
 
 ###How to Create a Tarball###
 
@@ -63,3 +82,4 @@ $>sudo nano files.txt<br>
 $>sudo tar cvf &lt;flavour&gt;_&lt;partitionName&gt;.tar -T files.txt
 $>sudo xz &lt;flavour&gt;_&lt;partitionName&gt;.tar
 </pre>
+5. Copy the tarball to the appropriate OS folder.
