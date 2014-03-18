@@ -21,7 +21,7 @@ It is probably a good idea to to go back to your home/pi directory before using 
 This script file determines the base filename of the tarball to be used, based on the name of OS flavour and partition names installed.
 (It assumes the first partition is mapped to /boot).
 With no arguments provided, it returns the name for the highest partition number, so `Raspbian_root` for Raspbian.
-If you want the name of the tarball taht should be used for the first partition, you can use `nc-get-label 1`, or `nc-get-label 2` for the second.
+If you want the name of the tarball that should be used for the first partition, you can use `nc-get-label 1`, or `nc-get-label 2` for the second.
 See `nc-set-wifi` for how to use this from within another script.
 
 ###nc-capture-wifi###
@@ -29,6 +29,7 @@ This script is used to used to capture the network and wifi settings after they 
 It simply creates a text file containing the names of the files to be captured:
 * /etc/network/interfaces
 * /etc/wpa_supplicant/wpa_supplicant.conf
+
 If your configuration requires additional files to be customised, add them manually to the generated text file.
 This script uses `nc-get-label` to determine the name of the text file to create. If you want to use another name, just specify it as the first argument, but note that only tarballs with the appropriate name will be installed automatically.
 
@@ -49,3 +50,5 @@ This is an example of a very simple script to setup the wifi and network configu
 It only supports WPA/WPA2 wifi networks, but it could be easily modified for other types.
 On execution of this script it will ask for the wifi network ID (SSID) and the password. It will then create a temporary sample '/etc/network/interfaces' and a `/etc/wpa_supplicant/wpa_supplicant.conf` file. These will be archived into a `Raspbian_root.tar` file (using `nc-get-label`) ready for copying to the NOOBS /os/Raspbian folder.
 Again, if you want to use a different name for the tar file, specify it as the 1st argument. But note that only customised tar files with the appropriate name will be installed automatically.
+
+If you notice some strange settings at the end of `interfaces` relating to eth0:1, these were suggested by @Cymplecy to provide a default wired IP address. if you don't need them they can be safely deleted.
